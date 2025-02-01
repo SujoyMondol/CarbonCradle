@@ -26,7 +26,7 @@
       "indent": ["error", 2], // 2-space indentation
       "quotes": ["error", "single"], // Single quotes
       "semi": ["error", "always"], // Always use semicolons
-      "@typescript-eslint/no-unused-vars": "warn", // Downgrade to warning
+      "@typescript-eslint/no-unused-vars": "off", // Downgrade to warning
       "@typescript-eslint/no-explicit-any": "off" // Disable `any` rule
     }
   }

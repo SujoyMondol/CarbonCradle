@@ -12,7 +12,7 @@ export default async function handler(
     try {
       const newData = await EnergyData.create(req.body);
       res.status(201).json(newData);
-    } catch (error) {
+    } catch  {
       res.status(500).json({ error: 'Failed to save data' });
     }
   } else {

@@ -6,38 +6,33 @@ if (!MONGODB_URI) {
   throw new Error('MONGODB_URI is missing in .env.local');
 }
 
-// Proper type definition for Mongoose cache
 interface MongooseCache {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
 }
 
-// Augment the NodeJS global type
 declare global {
-  namespace NodeJS {
-    interface Global {
-      mongoose: MongooseCache;
-    }
-  }
+  // eslint-disable-next-line no-var
+  var mongoose: MongooseCache;
 }
 
-// Initialize cache
-let cached: MongooseCache;
-
+// Initialize global cache if it doesn't exist
 if (!global.mongoose) {
   global.mongoose = { conn: null, promise: null };
 }
-cached = global.mongoose;
+
+// Reference the global cache
+const cached = global.mongoose;
 
 async function dbConnect(): Promise<typeof mongoose> {
   if (cached.conn) {
     return cached.conn;
   }
 
+
+
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI).then((mongooseInstance) => {
-      return mongooseInstance;
-    });
+    cached.promise = mongoose.connect(MONGODB_URI as string);
   }
 
   try {
