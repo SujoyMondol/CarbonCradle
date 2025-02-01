@@ -1,5 +1,6 @@
-import Image from "next/image";
+//import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Leaf, LineChart, CloudCog, Globe } from 'lucide-react';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,100 +15,92 @@ const geistMono = Geist_Mono({
 export default function Home() {
   return (
     <div
-      className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
+      className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-950`}
     >
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/pages/index.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <nav className="p-6 flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <Leaf className="w-8 h-8 text-green-600 dark:text-green-400" />
+          <span className="text-xl font-bold">CarbonCradle</span>
         </div>
+        <div className="flex gap-4">
+          <a href="#features" className="hover:text-green-600 transition-colors">Features</a>
+          <a href="#about" className="hover:text-green-600 transition-colors">About</a>
+          <a href="#contact" className="hover:text-green-600 transition-colors">Contact</a>
+        </div>
+      </nav>
+
+      <main className="container mx-auto px-4 py-20">
+        {/* Hero Section */}
+        <section className="text-center mb-20">
+          <h1 className="text-5xl font-bold mb-6">
+            Track, Reduce, and <br/>
+            <span className="bg-gradient-to-r from-green-600 to-teal-500 bg-clip-text text-transparent">
+              Sustain
+            </span>
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
+            Cradle for Carbon, care for the planet
+          </p>
+          
+          <div className="flex justify-center gap-4">
+            <button className="bg-green-600 text-white px-8 py-3 rounded-full hover:bg-green-700 transition-colors">
+              Get Started
+            </button>
+            <button className="border border-green-600 text-green-600 px-8 py-3 rounded-full hover:bg-green-50 transition-colors">
+              Learn More
+            </button>
+          </div>
+        </section>
+
+        {/* Features Grid */}
+        <section id="features" className="grid md:grid-cols-3 gap-8 mb-20">
+          <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+            <LineChart className="w-12 h-12 text-green-600 mb-4" />
+            <h3 className="text-xl font-bold mb-2">AI-Powered Analytics</h3>
+            <p className="text-gray-600 dark:text-gray-300">
+              Smart insights and predictions to optimize your carbon footprint
+            </p>
+          </div>
+
+          <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+            <CloudCog className="w-12 h-12 text-green-600 mb-4" />
+            <h3 className="text-xl font-bold mb-2">Real-Time Monitoring</h3>
+            <p className="text-gray-600 dark:text-gray-300">
+              Track energy consumption and emissions in real-time
+            </p>
+          </div>
+
+          <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+            <Globe className="w-12 h-12 text-green-600 mb-4" />
+            <h3 className="text-xl font-bold mb-2">Sustainability Insights</h3>
+            <p className="text-gray-600 dark:text-gray-300">
+              Personalized recommendations for eco-friendly practices
+            </p>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="text-center bg-green-100 dark:bg-gray-800 py-16 rounded-3xl mb-20">
+          <h2 className="text-3xl font-bold mb-6">Join the Green Revolution</h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+            Start your journey towards sustainable living with our AI-driven platform. 
+            Reduce your carbon footprint while maintaining modern efficiency.
+          </p>
+          <button className="bg-green-600 text-white px-8 py-3 rounded-full hover:bg-green-700 transition-colors">
+            Start Free Trial
+          </button>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer className="bg-gray-100 dark:bg-gray-900 py-8">
+        <div className="container mx-auto px-4 text-center text-gray-600 dark:text-gray-400">
+          <p>© 2024 CarbonCradle. All rights reserved.</p>
+          <div className="mt-4 flex justify-center gap-6">
+            <a href="#" className="hover:text-green-600 transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-green-600 transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-green-600 transition-colors">GitHub</a>
+          </div>
+        </div>
       </footer>
     </div>
   );
