@@ -1,0 +1,30 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": 2021,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "env": {
+      "browser": true,
+      "node": true,
+      "es2021": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react/recommended",
+      "plugin:react-hooks/recommended",
+      "next/core-web-vitals"
+    ],
+    "rules": {
+      "react/react-in-jsx-scope": "off", // Next.js doesn't require React import
+      "react/prop-types": "off", // Not needed with TypeScript
+      "@typescript-eslint/explicit-module-boundary-types": "off", // Optional: Avoid requiring return types
+      "indent": ["error", 2], // 2-space indentation
+      "quotes": ["error", "single"], // Single quotes
+      "semi": ["error", "always"] // Always use semicolons
+    }
+  }
