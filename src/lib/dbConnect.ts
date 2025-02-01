@@ -1,24 +1,52 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI!;
+const MONGODB_URI = process.env.MONGODB_URI;
 
-if (!MONGODB_URI) throw new Error('MONGODB_URI is missing in .env.local');
-
-// Cache the connection to avoid multiple connections during development
-let cached = (global as any).mongoose;
-
-if (!cached) {
-  cached = (global as any).mongoose = { conn: null, promise: null };
+if (!MONGODB_URI) {
+  throw new Error('MONGODB_URI is missing in .env.local');
 }
 
-async function dbConnect() {
-  if (cached.conn) return cached.conn;
+// Proper type definition for Mongoose cache
+interface MongooseCache {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
+}
 
-  if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI).then(mongoose => mongoose);
+// Augment the NodeJS global type
+declare global {
+  namespace NodeJS {
+    interface Global {
+      mongoose: MongooseCache;
+    }
+  }
+}
+
+// Initialize cache
+let cached: MongooseCache;
+
+if (!global.mongoose) {
+  global.mongoose = { conn: null, promise: null };
+}
+cached = global.mongoose;
+
+async function dbConnect(): Promise<typeof mongoose> {
+  if (cached.conn) {
+    return cached.conn;
   }
 
-  cached.conn = await cached.promise;
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(MONGODB_URI).then((mongooseInstance) => {
+      return mongooseInstance;
+    });
+  }
+
+  try {
+    cached.conn = await cached.promise;
+  } catch (err) {
+    cached.promise = null;
+    throw err;
+  }
+
   return cached.conn;
 }
 
