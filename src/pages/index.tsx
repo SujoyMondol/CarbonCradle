@@ -1,4 +1,3 @@
-//import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Leaf, LineChart, CloudCog, Globe } from 'lucide-react';
 import Link from "next/link";
@@ -34,7 +33,7 @@ export default function Home() {
         {/* Hero Section */}
         <section className="text-center mb-20">
           <h1 className="text-5xl font-bold mb-6">
-            Track, Reduce, and <br/>
+            Track, Reduce, and <br />
             <span className="bg-gradient-to-r from-green-600 to-teal-500 bg-clip-text text-transparent">
               Sustain
             </span>
@@ -50,6 +49,7 @@ export default function Home() {
             <button className="border border-green-600 text-green-600 px-8 py-3 rounded-full hover:bg-green-50 transition-colors">
               Learn More
             </button>
+            
           </div>
         </section>
 
@@ -87,11 +87,19 @@ export default function Home() {
             Start your journey towards sustainable living with our AI-driven platform. 
             Reduce your carbon footprint while maintaining modern efficiency.
           </p>
+          <div className="flex justify-center gap-4">
           <Link href="/register">
-          <button className="bg-green-600 text-white px-8 py-3 rounded-full hover:bg-green-700 transition-colors">
-            Register
-          </button>
+            <button className="bg-green-600 text-white px-8 py-3 rounded-full hover:bg-green-700 transition-colors">
+              Register
+            </button>
           </Link>
+          {/* Sign In Button */}
+          <Link href="/login">
+              <button className="border border-green-600 text-green-600 px-8 py-3 rounded-full hover:bg-green-50 transition-colors">
+                Sign In
+              </button>
+            </Link>
+            </div>
         </section>
       </main>
 

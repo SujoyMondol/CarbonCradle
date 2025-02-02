@@ -65,9 +65,11 @@ export default function Login() {
             required
             className="w-full p-2 border rounded bg-gray-100 dark:bg-gray-700 dark:text-white"
           />
+          <Link href='/dashboard'>
           <button type="submit" className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700 transition">
             Log In
           </button>
+          </Link>
         </form>
 
         {/* Register Link */}
