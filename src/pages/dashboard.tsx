@@ -1,6 +1,7 @@
-import {  useState } from 'react'
+import { useState } from 'react'
 import { useSession } from 'next-auth/react'
-import { Leaf, LineChart, Zap, Lightbulb } from 'lucide-react'
+import { Leaf, LineChart, Zap, Lightbulb, MessageCircle } from 'lucide-react'
+import Link from 'next/link'
 
 export default function Dashboard() {
   const { data: session } = useSession()
@@ -114,6 +115,16 @@ export default function Dashboard() {
           </div>
         </button>
       </div>
+
+      {/* Floating Chat Button */}
+      <Link  href="/chatPage"
+            className="fixed bottom-8 right-8 bg-green-600 text-white w-14 h-14 flex items-center justify-center rounded-full shadow-lg hover:bg-green-700 transition duration-300"
+            aria-label="Go to Chat">
+        
+        <MessageCircle className="w-6 h-6" />
+        
+        
+      </Link>
     </div>
   )
 }
