@@ -1,6 +1,7 @@
 //import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Leaf, LineChart, CloudCog, Globe } from 'lucide-react';
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -86,15 +87,17 @@ export default function Home() {
             Start your journey towards sustainable living with our AI-driven platform. 
             Reduce your carbon footprint while maintaining modern efficiency.
           </p>
+          <Link href="/register">
           <button className="bg-green-600 text-white px-8 py-3 rounded-full hover:bg-green-700 transition-colors">
-            Start Free Trial
+            Register
           </button>
+          </Link>
         </section>
       </main>
 
       <footer className="bg-gray-100 dark:bg-gray-900 py-8">
         <div className="container mx-auto px-4 text-center text-gray-600 dark:text-gray-400">
-          <p>© 2024 CarbonCradle. All rights reserved.</p>
+          <p>© 2025 CarbonCradle. All rights reserved.</p>
           <div className="mt-4 flex justify-center gap-6">
             <a href="#" className="hover:text-green-600 transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-green-600 transition-colors">Terms of Service</a>
