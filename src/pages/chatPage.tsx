@@ -1,114 +1,147 @@
-import { useState } from "react";
-import axios from "axios";
-import { User } from "lucide-react";
-import { Geist, Geist_Mono } from "next/font/google";
-import { MainContainer, ChatContainer, MessageList, Message, MessageInput } from '@chatscope/chat-ui-kit-react';
-import '@chatscope/chat-ui-kit-react/dist/default.min.css';
+import { useState, useRef, useEffect } from 'react'
+import { Bot, User, Leaf, Send } from 'lucide-react'
 
-// Define the Message interface
-interface MessageType {
-  text: string;
-  sender: "user" | "ai"; // You can restrict sender to 'user' or 'ai'
-  timestamp: string;
+interface Message {
+  id: number
+  content: string
+  isAI: boolean
 }
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+export default function AIChatPage() {
+  const [messages, setMessages] = useState<Message[]>([
+    { id: 1, content: "Hi! I'm EcoBot 🌱 How can I help you with sustainability today?", isAI: true }
+  ])
+  const [inputMessage, setInputMessage] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+  // Auto-scroll to bottom when messages change
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
 
-const ChatPage = () => {
-  // Use the MessageType interface for messages state
-  const [messages, setMessages] = useState<MessageType[]>([]);
-  const [userInput, setUserInput] = useState("");
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
 
-  // Handling user input submission
-  const handleSendMessage = async (text: string) => {
-    setMessages([
-      ...messages,
-      { text, sender: "user", timestamp: new Date().toISOString() },
-    ]);
-    setUserInput("");
+  // Mock AI response generator
+  const generateAIResponse = async (prompt: string) => {
+    const mockResponses = [
+      "Did you know reducing your shower time by 2 minutes can save 10 gallons of water?",
+      "Consider using a programmable thermostat to save up to 10% on heating and cooling.",
+      "A meat-free meal once a week can significantly reduce your carbon footprint.",
+      "LED bulbs use 75% less energy than traditional incandescent bulbs."
+    ]
+    
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    return mockResponses[Math.floor(Math.random() * mockResponses.length)]
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!inputMessage.trim() || isLoading) return
+
+    // Add user message
+    const newMessage: Message = {
+      id: messages.length + 1,
+      content: inputMessage,
+      isAI: false
+    }
+    setMessages(prev => [...prev, newMessage])
+    setInputMessage('')
+    setIsLoading(true)
 
     try {
-      // Call HuggingFace API for chat response
-      const response = await axios.post(
-        "https://api-inference.huggingface.co/models/gpt-3.5-turbo", // Replace with your model's URL if different
-        {
-          inputs: text,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
-          },
-        }
-      );
-
-      const aiResponse = response.data.choices[0].message.content;
-
-      setMessages([
-        ...messages,
-        { text: aiResponse, sender: "ai", timestamp: new Date().toISOString() },
-      ]);
+      // Get AI response
+      const aiResponse = await generateAIResponse(inputMessage)
+      const aiMessage: Message = {
+        id: messages.length + 2,
+        content: aiResponse,
+        isAI: true
+      }
+      setMessages(prev => [...prev, aiMessage])
     } catch (error) {
-      console.error("Error in HuggingFace API call:", error);
+      setMessages(prev => [...prev, {
+        id: messages.length + 2,
+        content: "Sorry, I'm having trouble connecting. Please try again later.",
+        isAI: true
+      }])
+    } finally {
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
-    <div
-      className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-950`}
-    >
-      <nav className="p-6 flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <User className="w-8 h-8 text-green-600 dark:text-green-400" />
-          <span className="text-xl font-bold">AI Chat</span>
+    <div className="flex flex-col h-screen bg-green-50 dark:bg-gray-900">
+      {/* Chat Header */}
+      <div className="p-4 bg-white dark:bg-gray-800 border-b border-green-100 dark:border-gray-700">
+        <div className="flex items-center gap-3">
+          <Leaf className="w-6 h-6 text-green-600 dark:text-green-400" />
+          <h1 className="text-xl font-semibold text-gray-800 dark:text-white">
+            EcoBot Assistant
+          </h1>
         </div>
-      </nav>
+      </div>
 
-      <main className="container mx-auto px-4 py-20">
-        {/* Chat Section */}
-        <section className="flex flex-col items-center gap-8">
-          <div className="w-full max-w-3xl p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg h-[600px]">
-            <MainContainer>
-              <ChatContainer>
-                <MessageList>
-                  {messages.map((msg, i) => (
-                    <Message 
-                      key={i}
-                      model={{
-                        message: msg.text,
-                        sender: msg.sender,
-                        direction: msg.sender === 'user' ? 'outgoing' : 'incoming',
-                        position: 'single'
-                      }}
-                    />
-                  ))}
-                </MessageList>
-                <MessageInput 
-                  value={userInput}
-                  onChange={val => setUserInput(val)}
-                  onSend={() => handleSendMessage(userInput)}
-                  placeholder="Type message here"
-                />
-              </ChatContainer>
-            </MainContainer>
+      {/* Chat Messages */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            className={`flex ${message.isAI ? 'justify-start' : 'justify-end'} gap-3`}
+          >
+            <div className={`p-4 rounded-2xl max-w-3xl ${
+              message.isAI 
+                ? 'bg-white dark:bg-gray-800 border border-green-100 dark:border-gray-700'
+                : 'bg-green-100 dark:bg-gray-700'
+            }`}
+            >
+              <div className="flex items-start gap-3">
+                {message.isAI ? (
+                  <Bot className="w-5 h-5 text-green-600 dark:text-green-400 mt-1" />
+                ) : (
+                  <User className="w-5 h-5 text-gray-600 dark:text-gray-300 mt-1" />
+                )}
+                <p className="text-gray-800 dark:text-gray-100">{message.content}</p>
+              </div>
+            </div>
           </div>
-        </section>
-      </main>
+        ))}
+        {isLoading && (
+          <div className="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-2xl">
+            <Bot className="w-5 h-5 text-green-600 dark:text-green-400 animate-pulse" />
+            <div className="flex space-x-2">
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+            </div>
+          </div>
+        )}
+        <div ref={messagesEndRef} />
+      </div>
 
-      <footer className="bg-gray-100 dark:bg-gray-900 py-8">
-        <div className="container mx-auto px-4 text-center text-gray-600 dark:text-gray-400">
-          <p>© 2025 CarbonCradle. All rights reserved.</p>
+      {/* Chat Input */}
+      <form onSubmit={handleSubmit} className="p-4 bg-white dark:bg-gray-800 border-t border-green-100 dark:border-gray-700">
+        <div className="relative">
+          <input
+            type="text"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            placeholder="Ask me about sustainability..."
+            className="w-full p-4 pr-12 rounded-xl border border-green-100 dark:border-gray-700 bg-green-50/50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400"
+            disabled={isLoading}
+          />
+          <button
+            type="submit"
+            disabled={isLoading}
+            aria-label="Send message"
+            className="absolute right-4 top-4 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 disabled:opacity-50"
+          >
+            <Send className="w-6 h-6" />
+          </button>
         </div>
-      </footer>
+      </form>
     </div>
-  );
-};
-
-export default ChatPage;
+  )
+}

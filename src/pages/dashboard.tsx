@@ -114,17 +114,14 @@ export default function Dashboard() {
             <span className="text-sm font-medium">Eco Tips</span>
           </div>
         </button>
-      </div>
-
-      {/* Floating Chat Button */}
-      <Link  href="/chatPage"
-            className="fixed bottom-8 right-8 bg-green-600 text-white w-14 h-14 flex items-center justify-center rounded-full shadow-lg hover:bg-green-700 transition duration-300"
-            aria-label="Go to Chat">
-        
+        <Link 
+        href="/chatPage" 
+        className="fixed bottom-8 right-8 bg-green-600 text-white w-14 h-14 flex items-center justify-center rounded-full shadow-lg hover:bg-green-700 transition duration-300"
+        aria-label="Go to Chat"
+      >
         <MessageCircle className="w-6 h-6" />
-        
-        
       </Link>
+      </div>
     </div>
   )
 }
